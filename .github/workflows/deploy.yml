@@ -1,0 +1,21 @@
+name: Despliegue en Azure Static Website
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar código del repositorio
+        uses: actions/checkout@v4
+
+      - name: Subir archivos web a Azure Storage
+        run: |
+          az storage blob upload-batch \
+            --account-name webfercajeta2026 \
+            --connection-string "${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}" \
+            --destination '$web' \
+            --source . \
+            --overwrite
